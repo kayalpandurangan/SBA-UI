@@ -1,0 +1,47 @@
+
+<!-- <div class="container-fluid"> -->
+<div style="text-align:center;">
+  <h2>
+    <b>{{title}}</b>
+  </h2>
+</div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-info">
+  <div class="navbar-header">
+    <a class="navbar-brand mb-2">
+     Projects
+    </a>
+  </div>
+
+  <button class="navbar-toggler" type="button" (click)="toggleNavbar()">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+
+  <div class="collapse navbar-collapse" [ngClass]="{ 'show': navbarOpen }">
+    <ul class="navbar-nav mr-auto">
+      <li routerLinkActive="active">
+        <a class="nav-link" routerLink="/AddUser">
+          <h4>Add User</h4>
+        </a>
+      </li>
+      <li routerLinkActive="active">
+        <a class="nav-link" routerLink="/AddTask">
+          <h4>Add Task</h4>
+        </a>
+      </li>
+      <li routerLinkActive="active">
+        <a class="nav-link" routerLink="/AddProject">
+          <h4>Add Project</h4>
+        </a>
+      </li>
+      <li routerLinkActive="active">
+        <a class="nav-link" routerLink="/ViewTask">
+          <h4>View Task</h4>
+        </a>
+      </li>
+
+    </ul>
+  </div>
+</nav>
+<router-outlet></router-outlet>
+<!-- </div> -->

@@ -1,0 +1,132 @@
+<div class="container-fluid">
+  <div class="jumbotron">
+    <form #addprojectForm="ngForm">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Create Project</h3>
+        </div>
+        <div id=formbody class="card-body">
+          <div><p class="text-success" [hidden]="successMessageFlag"> {{successMessage}} </p></div>
+          <div><p class="text-success" [hidden]="updateMessageFlag"> {{updateMessage}} </p></div>
+          <div class="form-group row">
+            <label for="projectName" class="col-sm-3 col-form-label"> Project </label>
+            <div class="col-md-6">
+              <input type="text" class="form-control" [(ngModel)]="projectobj.projectName" name="projectName"
+                id="projectName" placeholder="Project Name" required #projectName="ngModel" />
+              <small *ngIf="!projectName.valid"></small>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-3 checkbox-inline col-form-label">
+              <input type="checkbox" [(ngModel)]="enableDate" ng-init="enableDate=false" name="enableDate"
+                (change)="changeEvent(enableDate)">
+              <strong> Set start date and end date</strong>
+            </label>
+            <div class="col-md-3">
+              <input type="date" class="form-control" placeholder="Start Date" id="startDate" [value]="startDate | date: 'yyyy-MM-dd'"
+                [(ngModel)]="projectobj.startDate" name="startDate" [disabled]="!enableDate">
+            </div>
+            <div class="col-md-3">
+              <input type="date" class="form-control" placeholder="End Date" id="endDate"
+                [(ngModel)]="projectobj.endDate" name="endDate" [disabled]="!enableDate">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-3 col-form-label"> Priority </label>
+            <div class="col-md-4">
+              0<input type="range" class="slidecontainer form-control" min="1" max="30" class="slider" id="myRange"
+                [(ngModel)]="projectobj.priority" name="priority">
+            </div>
+            <div class="col-md-5">
+              30
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="manager" class="col-sm-3 col-form-label"> Manager </label>
+            <div class="col-md-3">
+              <input type="text" class="form-control" [(ngModel)]="projectobj.manager" name="manager" id="manager"
+                required readonly #manager="ngModel" />
+            </div>
+            <div class="col-md-3">
+              <button type="button" class="btn btn-success" data-toggle="modal" data-target="#userModal">Search</button>
+            </div>
+          </div>
+          <div class="form-group row mt-2">
+            <div class="col-md-3"></div>
+            <div class="col-md-8">
+              <input type="button" [value]="updateProjectFlag ? 'Update' : 'Add'" class="btn btn-success"
+                (click)="onSubmit(projectobj);addprojectForm.reset();" [disabled]="!addprojectForm.form.valid" />
+              <button class="btn btn-danger ml-2" (click)="addprojectForm.reset()">Reset</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row mt-4 ml-4">
+          <div class="col-md-4">
+            <input type="text" class="form-control" [(ngModel)]="searchData" placeholder="Search.." name="searchData">
+          </div>
+          <div class="col-md-8">
+            <label class="form-group">Sort By</label>
+            <button class="btn btn-info ml-2" (click)="sortByStartDate()">Start Date</button>
+            <button class="btn btn-info ml-2" (click)="sortByEndDate()">End Date</button>
+            <button class="btn btn-info ml-2" (click)="sortByPriority()">Priority</button>
+            <button class="btn btn-info ml-2" (click)="sortByCompleted()">Completed</button>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="card mt-4">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Project</th>
+            <th scope="col">No of Tasks</th>
+            <th scope="col">Completed Tasks</th>
+            <th scope="col">Priority</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">End Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let project of projectdetails | projectfilter:searchData">
+            <th scope="row">{{project.projectName}}</th>
+            <td>{{project.taskNumber}}</td>
+            <td>{{project.completedTaskNumber}}</td>
+            <td>{{project.priority}}</td>
+            <td>{{project.startDate | date: 'MM/dd/yyyy'}}</td>
+            <td>{{project.endDate | date: 'MM/dd/yyyy'}}</td>
+            <td>
+              <button class="btn btn-success" (click)="editProject(project)">Update</button>&nbsp;&nbsp;
+              <button class="btn btn-danger" (click)="deleteProject(project)">Suspend</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="modal fade" tabindex="-1" id="userModal" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Select User</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <ul class="list-group">
+                <li><input class="form-control" type="text" [(ngModel)]="searchManager" placeholder="Search"
+                    name="searchManager"></li>
+                <br>
+                <button class="list-group-item" data-dismiss="modal" *ngFor="let user of users | filter:searchManager"
+                  (click)="projectobj.manager=user.firstName; projectobj.userId=user.userId">{{user.firstName}}</button>
+              </ul>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+

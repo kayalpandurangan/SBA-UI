@@ -1,0 +1,80 @@
+<div class="container-fluid">
+  <div class="jumbotron">
+    <div class="card">
+      <div class="form-group row mt-4">
+        <label class="col-sm-1 col-form-label"> Project </label>
+        <!-- <div class="row"> -->
+          <div class="col-md-2">
+            <input type="text" class="form-control" [(ngModel)]="projectName" placeholder=" Project Name " readonly>
+          </div>
+          <div class="col-md-2">
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#projectModal"
+              [disabled]="disable">Search</button>
+          </div>
+        <!-- </div> -->
+        <!-- <div class="row"> -->
+          <div class="col-md-7">
+            <label class="form-group">Sort By</label>
+            <button class="btn btn-info ml-2" (click)="sortByStartDate()">Start Date</button>
+            <button class="btn btn-info ml-2" (click)="sortByEndDate()">End Date</button>
+            <button class="btn btn-info ml-2" (click)="sortByPriority()">Priority</button>
+            <button class="btn btn-info ml-2" (click)="sortByCompleted()">Completed</button>
+          </div>
+        <!-- </div> -->
+        <hr style="border-top: 2px; width: 100%" />
+        <div class="container-fluid">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Task</th>
+                <th scope="col">Parent Task</th>
+                <th scope="col">Priority</th>
+                <th scope="col">Start Date</th>
+                <th scope="col">End Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let task of taskDetails; let i= index;">
+                <th scope="row">{{task.taskName}}</th>
+                <td>{{task.parentTaskName}}</td>
+                <td>{{task.priority}}</td>
+                <td>{{task.startDate | date: 'MM/dd/yyyy'}}</td>
+                <td>{{task.endDate | date: 'MM/dd/yyyy'}}</td>
+                <td>
+                  <button class="btn btn-success" (click)="updateTaskDetails(task)" [disabled]="editDisable[i]">Edit</button>
+                  <button class="btn btn-danger ml-2" (click)="endTask(task); disablebutton(i)" [disabled]="editDisable[i]">EndTask</button>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+        <div class="modal fade" tabindex="-1"  id="projectModal" role="dialog">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Select Project</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="list-group">
+                        <li><input class="form-control" type="text" [(ngModel)]="searchInput" placeholder="Search"
+                            name="searchInput"></li>
+                        <br>
+                        <button class="list-group-item" *ngFor="let project of projectDetails | projectfilter:searchInput"
+                          (click)="projectName=project.projectName;getTasksByProject(project.projectId)"
+                          data-dismiss="modal">{{project.projectName}}</button>
+                      </ul>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+      </div>
+    </div>
+  </div>

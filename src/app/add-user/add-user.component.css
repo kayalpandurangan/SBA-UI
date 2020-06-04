@@ -1,0 +1,9 @@
+.row{
+    padding: 10px;
+  }
+.btn{
+    width: 6.4em;
+}
+label {
+    font-weight: bold;
+}

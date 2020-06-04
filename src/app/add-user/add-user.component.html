@@ -1,0 +1,87 @@
+<div class="container-fluid">
+  <div class="jumbotron">
+    <form #adduserForm="ngForm">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Create User</h4>
+        </div>
+        <div class="card-body">
+            <div><p class="text-success" [hidden]="successMessageFlag"> {{successMessage}} </p></div>
+            <div><p class="text-success" [hidden]="updateMessageFlag"> {{updateMessage}} </p></div>
+          <div class="form-group row">
+            <label for="firstName" class="col-md-2 col-form-label">First Name</label>
+            <div class="col-md-6">
+              <input type="text" class="form-control" [(ngModel)]="userobj.firstName" name="firstName" required
+                #firstName="ngModel" id="firstName" placeholder="firstName">
+              <small *ngIf="!firstName.valid"></small>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="lastName" class="col-md-2 col-form-label">Last Name</label>
+            <div class="col-md-6">
+              <input type="text" class="form-control" id="lastName" placeholder="lastName" [(ngModel)]="userobj.lastName"
+                name="lastName" required #lastName="ngModel">
+            </div>
+          </div>
+          <div class="form-group row mt-4">
+            <label for="empId" class="col-md-2 col-form-label">Employee ID</label>
+            <div class="col-md-6">
+              <input type="text" class="form-control" id="empId" placeholder="empId" [(ngModel)]="userobj.employeeId"
+                name="employeeId" required>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-2"></div>
+            <div class="col-md-6">
+              <input type="button" [value]="editUserFlag ? 'Update' : 'Add'" class="btn btn-success"
+                (click)="onSubmit(userobj);adduserForm.reset();" [disabled]="!adduserForm.form.valid" />
+              <button value="Reset" class="ml-2 btn btn-danger" (click)="adduserForm.reset()">Reset</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-md-4">
+          <input class="form-control" type="text" [(ngModel)]="searchInput" placeholder="Search.." name="searchInput">
+        </div>
+        <div class="col-md-8">
+          <label class="form-group">Sort By</label>
+          <button class="ml-2 btn btn-info" (click)="sortByFirstName()">First Name</button>
+          <button class="ml-2 btn btn-info" (click)="sortByLastName()">Last Name</button>
+          <button class="ml-2 btn btn-info" (click)="sortById()">Id</button>
+        </div>
+      </div>
+    </form>
+    <div id=listuser>
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">User Details</h4>
+        </div>
+        <div class="card-body" *ngFor="let user of userdetails | filter:searchInput">
+          <div class="row">
+            <div class="col-md-6">
+              <input class="form-control" [(ngModel)]="user.firstName" placeholder="firstName" readonly #test="ngModel">
+            </div>
+            <div class="col-md-6">
+              <button class="btn btn-success" (click)="updateUser(user)">Edit</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <input class="form-control" [(ngModel)]="user.lastName" placeholder="lastName" readonly>
+            </div>
+            <div class="col-md-6">
+              <button class="btn btn-danger" (click)="deleteUser(user)">Delete</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <input class="form-control" [(ngModel)]="user.employeeId" placeholder="employeeId" readonly>
+            </div>
+          </div>
+          <hr>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
